@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .digit {
+      position: relative;
+      width: 120px;
+      height: 200px;
+    }
+
+    .seg {
+      position: absolute;
+      background: #333;
+      border-radius: 8px;
+    }
+
+    .on {
+      background: rgb(35, 110, 189);
+      box-shadow: 0 0 20px rgb(255, 136, 0);
+    }
+
+    .a { top: 0; left: 20px; width: 80px; height: 15px; }
+    .b { top: 15px; right: 0; width: 15px; height: 80px; }
+    .c { bottom: 15px; right: 0; width: 15px; height: 80px; }
+    .d { bottom: 0; left: 20px; width: 80px; height: 15px; }
+    .e { bottom: 15px; left: 0; width: 15px; height: 80px; }
+    .f { top: 15px; left: 0; width: 15px; height: 80px; }
+    .g { top: 92px; left: 20px; width: 80px; height: 15px; }
+  </style>
+</head>
+<body>
+
+<div class="digit" style="color:gray;font-size:45px">
+  <div class="seg a on">A</div>
+  <div class="seg b on">B</div>
+  <div class="seg c on">C</div>
+  <div class="seg d on">D</div>
+  <div class="seg e on">E</div>
+  <div class="seg f on">F</div>
+  <div class="seg g ">G</div>
+</div>
+
+</body>
+</html>

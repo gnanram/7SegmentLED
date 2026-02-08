@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:white;
+}
+
+.clock {
+  display:flex;
+  gap:20px;
+  align-items:center;
+}
+
+.digit {
+  position: relative;
+  width: 60px;
+  height: 100px;
+}
+
+.colon {
+  font-size: 60px;
+  color: green;
+  text-shadow: 0 0 10px orangered;
+  margin: 0 5px;
+}
+
+.seg {
+  position: absolute;
+  background: #222;
+  border-radius: 5px;
+}
+
+.on {
+  background: green;
+  box-shadow: 0 0 10px orangered;
+}
+
+.a { top:0; left:10px; width:40px; height:8px; }
+.b { top:8px; right:0; width:8px; height:40px; }
+.c { bottom:8px; right:0; width:8px; height:40px; }
+.d { bottom:0; left:10px; width:40px; height:8px; }
+.e { bottom:8px; left:0; width:8px; height:40px; }
+.f { top:8px; left:0; width:8px; height:40px; }
+.g { top:46px; left:10px; width:40px; height:8px; }
+</style>
+</head>
+<body>
+
+<div class="clock" id="clock"></div>
+
+<script>
+const numbers = {
+  0:["a","b","c","d","e","f"],
+  1:["b","c"],
+  2:["a","b","g","e","d"],
+  3:["a","b","c","d","g"],
+  4:["f","g","b","c"],
+  5:["a","f","g","c","d"],
+  6:["a","f","e","d","c","g"],
+  7:["a","b","c"],
+  8:["a","b","c","d","e","f","g"],
+  9:["a","b","c","d","f","g"]
+};
+
+function createDigit() {
+  const d = document.createElement("div");
+  d.className = "digit";
+  ["a","b","c","d","e","f","g"].forEach(s=>{
+    const seg = document.createElement("div");
+    seg.className = "seg " + s;
+    d.appendChild(seg);
+  });
+  return d;
+}
+
+function showNumber(digit, num) {
+  digit.querySelectorAll(".seg").forEach(s=>{
+    s.classList.remove("on");
+  });
+  numbers[num].forEach(s=>{
+    digit.querySelector("." + s).classList.add("on");
+  });
+}
+
+const clock = document.getElementById("clock");
+const digits = [];
+for(let i=0;i<6;i++){
+  const d = createDigit();
+  digits.push(d);
+  clock.appendChild(d);
+  if(i===1 || i===3) {
+    const colon = document.createElement("div");
+    colon.className = "colon";
+    colon.textContent = ":";
+    clock.appendChild(colon);
+  }
+}
+
+function updateClock() {
+  const t = new Date();
+  const time = [
+    Math.floor(t.getHours()/10), t.getHours()%10,
+    Math.floor(t.getMinutes()/10), t.getMinutes()%10,
+    Math.floor(t.getSeconds()/10), t.getSeconds()%10
+  ];
+  time.forEach((n,i)=>showNumber(digits[i], n));
+}
+
+setInterval(updateClock,1000);
+updateClock();
+</script>
+
+</body>
+</html>

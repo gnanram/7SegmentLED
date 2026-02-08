@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>7-Segment Digital Clock</title>
+<style>
+body {
+  background:#000;
+  color:white;
+  font-family:Arial, sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.clock {
+  display:flex;
+  gap:20px;
+  align-items:center;
+}
+
+.digit {
+  position:relative;
+  width:120px;
+  height:200px;
+}
+
+.seg {
+  position:absolute;
+  background:#222;
+  border-radius:8px;
+}
+
+.on {
+  background:red;
+  box-shadow:0 0 25px red;
+}
+
+.a { top:0; left:20px; width:80px; height:15px; }
+.b { top:15px; right:0; width:15px; height:80px; }
+.c { bottom:15px; right:0; width:15px; height:80px; }
+.d { bottom:0; left:20px; width:80px; height:15px; }
+.e { bottom:15px; left:0; width:15px; height:80px; }
+.f { top:15px; left:0; width:15px; height:80px; }
+.g { top:92px; left:20px; width:80px; height:15px; }
+
+.colon {
+  font-size:90px;
+  margin-bottom:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="clock" id="clock"></div>
+
+<script>
+const numbers = {
+  0:["a","b","c","d","e","f"],
+  1:["b","c"],
+  2:["a","b","g","e","d"],
+  3:["a","b","c","d","g"],
+  4:["f","g","b","c"],
+  5:["a","f","g","c","d"],
+  6:["a","f","e","d","c","g"],
+  7:["a","b","c"],
+  8:["a","b","c","d","e","f","g"],
+  9:["a","b","c","d","f","g"]
+};
+
+const clock = document.getElementById("clock");
+
+function createDigit() {
+  const d = document.createElement("div");
+  d.className = "digit";
+  ["a","b","c","d","e","f","g"].forEach(s => {
+    const seg = document.createElement("div");
+    seg.className = "seg " + s;
+    d.appendChild(seg);
+  });
+  return d;
+}
+
+const digits = [];
+for (let i=0;i<6;i++) {
+  digits.push(createDigit());
+}
+
+digits.forEach((d,i)=>{
+  clock.appendChild(d);
+  if (i===1 || i===3) {
+    const c = document.createElement("div");
+    c.className="colon";
+    c.textContent=":";
+    clock.appendChild(c);
+  }
+});
+
+function showDigit(digit, num) {
+  digit.querySelectorAll(".seg").forEach(s=>s.classList.remove("on"));
+  numbers[num].forEach(s=>digit.querySelector("."+s).classList.add("on"));
+}
+
+function updateClock() {
+  const t = new Date();
+  const time = [
+    Math.floor(t.getHours()/10), t.getHours()%10,
+    Math.floor(t.getMinutes()/10), t.getMinutes()%10,
+    Math.floor(t.getSeconds()/10), t.getSeconds()%10
+  ];
+  time.forEach((n,i)=>showDigit(digits[i], n));
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+
+</body>
+</html>

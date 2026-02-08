@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  background:#0d0d0d;
+  color:white;
+  font-family:Arial;
+  display:flex;
+  gap:40px;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+/* ===== CLOCK ===== */
+.clock {
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.digit {
+  position: relative;
+  width: 60px;
+  height: 100px;
+}
+
+.seg {
+  position:absolute;
+  background:#222;
+  border-radius:5px;
+  opacity:0;
+}
+
+.on {
+  background:red;
+  box-shadow:0 0 10px red;
+  opacity:1;
+}
+
+.a { top:0; left:10px; width:40px; height:8px; }
+.b { top:8px; right:0; width:8px; height:40px; }
+.c { bottom:8px; right:0; width:8px; height:40px; }
+.d { bottom:0; left:10px; width:40px; height:8px; }
+.e { bottom:8px; left:0; width:8px; height:40px; }
+.f { top:8px; left:0; width:8px; height:40px; }
+.g { top:46px; left:10px; width:40px; height:8px; }
+
+.colon {
+  font-size:32px;
+  margin-bottom:20px;
+}
+
+/* ===== CONTROLS ===== */
+.controls {
+  display:grid;
+  grid-template-columns: repeat(2,1fr);
+  gap:10px;
+}
+
+button {
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  color:white;
+}
+
+.toggle {
+  background:#333;
+}
+
+.toggle.active {
+  background:#1e90ff;
+}
+
+.reveal {
+  grid-column:span 2;
+  background:limegreen;
+  color:black;
+}
+
+.reset {
+  grid-column:span 2;
+  background:#ff5252;
+  display:none;
+}
+</style>
+</head>
+<body>
+
+<!-- CLOCK DISPLAY -->
+<div class="clock" id="clock">
+  <!-- HH -->
+  <div class="digit"></div>
+  <div class="digit"></div>
+  <div class="colon">:</div>
+
+  <!-- MM -->
+  <div class="digit"></div>
+  <div class="digit"></div>
+  <div class="colon">:</div>
+
+  <!-- SS -->
+  <div class="digit"></div>
+  <div class="digit"></div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <button class="toggle" onclick="toggle('a',this)">Segment A</button>
+  <button class="toggle" onclick="toggle('b',this)">Segment B</button>
+  <button class="toggle" onclick="toggle('c',this)">Segment C</button>
+  <button class="toggle" onclick="toggle('d',this)">Segment D</button>
+  <button class="toggle" onclick="toggle('e',this)">Segment E</button>
+  <button class="toggle" onclick="toggle('f',this)">Segment F</button>
+  <button class="toggle" onclick="toggle('g',this)">Segment G</button>
+
+  <button class="reveal" onclick="reveal()">REVEAL TIME ⏱️</button>
+  <button class="reset" id="resetBtn" onclick="resetAll()">RESET 🔄</button>
+</div>
+
+<script>
+const state = { a:false,b:false,c:false,d:false,e:false,f:false,g:false };
+
+// build segments inside each digit
+document.querySelectorAll(".digit").forEach(d=>{
+  ["a","b","c","d","e","f","g"].forEach(s=>{
+    const seg = document.createElement("div");
+    seg.className = "seg " + s;
+    d.appendChild(seg);
+  });
+});
+
+function toggle(seg, btn) {
+  state[seg] = !state[seg];
+  btn.classList.toggle("active");
+}
+
+function reveal() {
+  document.querySelectorAll(".digit").forEach(d=>{
+    for (let seg in state) {
+      const el = d.querySelector("." + seg);
+      el.classList.remove("on");
+      if (state[seg]) el.classList.add("on");
+    }
+  });
+  document.getElementById("resetBtn").style.display = "block";
+}
+
+function resetAll() {
+  for (let seg in state) state[seg] = false;
+
+  document.querySelectorAll(".seg").forEach(s=>{
+    s.classList.remove("on");
+  });
+
+  document.querySelectorAll(".toggle").forEach(b=>{
+    b.classList.remove("active");
+  });
+
+  document.getElementById("resetBtn").style.display = "none";
+}
+</script>
+
+</body>
+</html>

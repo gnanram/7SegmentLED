@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  background:#0d0d0d;
+  color:white;
+  font-family:Arial, sans-serif;
+  display:flex;
+  gap:50px;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+/* ===== 7 Segment ===== */
+.digit {
+  position: relative;
+  width: 360px;
+  height: 600px;
+}
+
+.seg {
+  position: absolute;
+  background: #333;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #666;
+}
+
+.on {
+  background: red;
+  box-shadow: 0 0 20px red;
+  color: #fff;
+}
+
+.a { top:0; left:60px; width:240px; height:45px; }
+.b { top:45px; right:0; width:45px; height:240px; }
+.c { bottom:45px; right:0; width:45px; height:240px; }
+.d { bottom:0px; left:60px; width:240px; height:45px; }
+.e { bottom:45px; left:0; width:45px; height:240px; }
+.f { top:45px; left:0; width:45px; height:240px; }
+.g { top:276px; left:60px; width:240px; height:45px; }
+
+/* ===== Controls ===== */
+.controls {
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:10px;
+}
+
+button {
+  padding:10px;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+button.toggle {
+  background:#333;
+}
+
+button.toggle.active {
+  background:#1e90ff;
+}
+
+button.reveal {
+  grid-column: span 2;
+  background:limegreen;
+  color:black;
+  font-size:16px;
+}
+
+button.reset {
+  grid-column: span 2;
+  background:#ff5252;
+  display:none;
+}
+</style>
+</head>
+<body>
+
+<!-- Display -->
+<div class="digit">
+  <div class="seg a" id="a">A</div>
+  <div class="seg b" id="b">B</div>
+  <div class="seg c" id="c">C</div>
+  <div class="seg d" id="d">D</div>
+  <div class="seg e" id="e">E</div>
+  <div class="seg f" id="f">F</div>
+  <div class="seg g" id="g">G</div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <button class="toggle" onclick="toggle('a', this)">Segment A</button>
+  <button class="toggle" onclick="toggle('b', this)">Segment B</button>
+  <button class="toggle" onclick="toggle('c', this)">Segment C</button>
+  <button class="toggle" onclick="toggle('d', this)">Segment D</button>
+  <button class="toggle" onclick="toggle('e', this)">Segment E</button>
+  <button class="toggle" onclick="toggle('f', this)">Segment F</button>
+  <button class="toggle" onclick="toggle('g', this)">Segment G</button>
+
+  <button class="reveal" onclick="reveal()">REVEAL 🔍</button>
+  <button class="reset" id="resetBtn" onclick="resetAll()">RESET 🔄</button>
+</div>
+
+<script>
+const state = {
+  a:false, b:false, c:false,
+  d:false, e:false, f:false, g:false
+};
+
+function toggle(seg, btn) {
+  state[seg] = !state[seg];
+  btn.classList.toggle("active");
+}
+
+function reveal() {
+  for (let seg in state) {
+    const el = document.getElementById(seg);
+    el.classList.remove("on");
+    if (state[seg]) el.classList.add("on");
+  }
+  document.getElementById("resetBtn").style.display = "block";
+}
+
+function resetAll() {
+  for (let seg in state) {
+    state[seg] = false;
+    document.getElementById(seg).classList.remove("on");
+  }
+
+  document.querySelectorAll(".toggle").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
+  document.getElementById("resetBtn").style.display = "none";
+}
+</script>
+
+</body>
+</html>

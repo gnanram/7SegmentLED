@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  background:#111;
+  color:white;
+  font-family:Arial;
+  display:flex;
+  gap:40px;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.digit {
+  position: relative;
+  width: 360px;
+  height: 600px;
+}
+
+.seg {
+  position: absolute;
+  background: #333;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #666;
+}
+
+.on {
+  background: red;
+  box-shadow: 0 0 20px red;
+  color: #d3c884;
+}
+
+.a { top:0; left:60px; width:240px; height:45px; }
+.b { top:45px; right:0; width:45px; height:240px; }
+.c { bottom:45px; right:0; width:45px; height:240px; }
+.d { bottom:0; left:60px; width:240px; height:45px; }
+.e { bottom:45px; left:0; width:45px; height:240px; }
+.f { top:45px; left:0; width:45px; height:240px; }
+.g { top:276px; left:60px; width:240px; height:45px; }
+
+.controls {
+  display:grid;
+  grid-template-columns: auto auto;
+  gap:10px;
+}
+
+button {
+  padding:10px;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+button.toggle {
+  background:#333;
+}
+
+button.toggle.active {
+  background:#1e90ff;
+}
+
+label {
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- 7-segment display -->
+<div class="digit">
+  <div class="seg a" id="a">a</div>
+  <div class="seg b" id="b">b</div>
+  <div class="seg c" id="c">c</div>
+  <div class="seg d" id="d">d</div>
+  <div class="seg e" id="e">e</div>
+  <div class="seg f" id="f">f</div>
+  <div class="seg g" id="g">g</div>
+</div>
+
+<!-- Switch panel -->
+<div class="controls">
+  <button class="toggle" onclick="toggle('a', this)">Segment A</button>
+  <button class="toggle" onclick="toggle('b', this)">Segment B</button>
+  <button class="toggle" onclick="toggle('c', this)">Segment C</button>
+  <button class="toggle" onclick="toggle('d', this)">Segment D</button>
+  <button class="toggle" onclick="toggle('e', this)">Segment E</button>
+  <button class="toggle" onclick="toggle('f', this)">Segment F</button>
+  <button class="toggle" onclick="toggle('g', this)">Segment G</button>
+</div>
+
+<script>
+
+const state = {
+  a:false, b:false, c:false,
+  d:false, e:false, f:false, g:false
+};
+
+function toggle(seg, btn) {
+  state[seg] = !state[seg];
+  btn.classList.toggle("active");
+  document.getElementById(seg).classList.toggle("on");
+}
+
+// function toggle(seg) {
+//   document.getElementById(seg).classList.toggle("on");
+// }
+</script>
+
+</body>
+</html>
