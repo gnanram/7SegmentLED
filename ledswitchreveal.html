@@ -7,17 +7,30 @@ body {
   color:white;
   font-family:Arial, sans-serif;
   display:flex;
+  flex-wrap:wrap;
   gap:50px;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  min-height:100vh;
+  padding:20px;
 }
 
 /* ===== 7 Segment ===== */
+.digit-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
 .digit {
   position: relative;
   width: 360px;
   height: 600px;
+  transform-origin: center;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
 
 .seg {
@@ -53,6 +66,25 @@ body {
   gap:10px;
 }
 
+.size-control {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  background: #222;
+  border-radius: 8px;
+}
+
+.size-control label {
+  font-size: 14px;
+}
+
+.size-control input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+}
+
 button {
   padding:10px;
   color:white;
@@ -86,18 +118,24 @@ button.reset {
 <body>
 
 <!-- Display -->
-<div class="digit">
-  <div class="seg a" id="a">A</div>
-  <div class="seg b" id="b">B</div>
-  <div class="seg c" id="c">C</div>
-  <div class="seg d" id="d">D</div>
-  <div class="seg e" id="e">E</div>
-  <div class="seg f" id="f">F</div>
-  <div class="seg g" id="g">G</div>
+<div class="digit-container" id="digitContainer">
+  <div class="digit">
+    <div class="seg a" id="a">A</div>
+    <div class="seg b" id="b">B</div>
+    <div class="seg c" id="c">C</div>
+    <div class="seg d" id="d">D</div>
+    <div class="seg e" id="e">E</div>
+    <div class="seg f" id="f">F</div>
+    <div class="seg g" id="g">G</div>
+  </div>
 </div>
 
 <!-- Controls -->
 <div class="controls">
+  <div class="size-control">
+    <label>Display Size: <span id="sizeLabel">3.75</span> inches</label>
+    <input type="range" id="sizeSlider" min="1" max="8" step="0.25" value="3.75" oninput="updateSize(this.value)">
+  </div>
   <button class="toggle" onclick="toggle('a', this)">Segment A</button>
   <button class="toggle" onclick="toggle('b', this)">Segment B</button>
   <button class="toggle" onclick="toggle('c', this)">Segment C</button>
@@ -119,6 +157,22 @@ const state = {
 function toggle(seg, btn) {
   state[seg] = !state[seg];
   btn.classList.toggle("active");
+}
+
+function updateSize(inches) {
+  const baseSize = 3.75; // 360px = 3.75 inches at 96 DPI
+  const scale = inches / baseSize;
+  const container = document.getElementById('digitContainer');
+  const digit = document.querySelector('.digit');
+  
+  // Scale using transform for smooth animation
+  digit.style.transform = `scale(${scale})`;
+  
+  // Adjust container to reserve proper space
+  container.style.width = Math.round(360 * scale) + 'px';
+  container.style.height = Math.round(600 * scale) + 'px';
+  
+  document.getElementById('sizeLabel').textContent = inches;
 }
 
 function reveal() {
